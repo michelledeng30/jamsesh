@@ -1,0 +1,33 @@
+.top-wrapper {
+    display: flex;
+    padding-top:25px;
+}
+
+.top-tracks {
+    float: left;
+    width: 50%;
+    font-size:0.7em;
+}
+.top-artists {
+    float: right;
+    width: 50%;
+    font-size:0.7em;
+}
+
+.top-tracks-header {
+    padding-bottom:15px;
+}
+
+.top-artists-header {
+    padding-bottom:15px;
+}
+
+
+/* .top-tracks {
+    flex: 40%
+}
+.top-artists {
+    flex: 50%
+} */
+
+
