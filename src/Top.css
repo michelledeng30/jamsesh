@@ -1,17 +1,20 @@
 .top-wrapper {
     display: flex;
     padding-top:25px;
+    column-gap:30px;
 }
 
 .top-tracks {
     float: left;
     width: 50%;
     font-size:0.7em;
+    list-style-position:inside;
 }
 .top-artists {
     float: right;
     width: 50%;
     font-size:0.7em;
+    list-style-position:inside;
 }
 
 .top-tracks-header {
@@ -21,13 +24,5 @@
 .top-artists-header {
     padding-bottom:15px;
 }
-
-
-/* .top-tracks {
-    flex: 40%
-}
-.top-artists {
-    flex: 50%
-} */
 
 

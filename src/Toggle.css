@@ -1,0 +1,29 @@
+.toggle-header {
+    padding-top:25px;
+}
+
+.button-group button {
+    /* background-color: rgb(219, 175, 239); */
+    background-color:#f1be77;
+    border: 4px solid white;
+    color: white;
+    padding: 10px 24px;
+    cursor:pointer;
+    float:left;
+    font-size:1.5em;
+}
+
+.button-group button:not(:last-child) {
+    border-right: none;
+}
+
+.button-group:after {
+    content: "";
+    clear:both;
+    display:table;
+}
+
+.button-group button:hover {
+    background-color: rgb(219, 175, 239);
+    color: #333;
+  }

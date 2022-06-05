@@ -65,8 +65,8 @@ body {
 
 /** Buttons **/
 
-.btn {
-  background-color: transparent;
+.login {
+  background-color: white;
   border-radius: 2em;
   border: 0.2em solid #1ecd97;
   color: #1ecd97;
@@ -77,14 +77,14 @@ body {
   transition: all 0.25s ease;
 }
 
-.btn:hover {
+.login:hover {
   background: #1ecd97;
   color: #333;
 }
 
-.btn--login {
+/* .btn--login {
   margin: 0 auto;
-}
+} */
 
 /** Background **/
 

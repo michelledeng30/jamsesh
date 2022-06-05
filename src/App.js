@@ -1,16 +1,20 @@
 import React, { Component } from "react";
 import * as $ from "jquery";
 import { authEndpoint, clientId, redirectUri, scopes } from "./const";
+import { track_uri, artist_uri, short_uri, medium_uri, long_uri } from "./const";
 import hash from "./hash";
 import Player from "./Player";
 import Top from "./Top";
+import Toggle from "./Toggle";
+import Button from 'react-bootstrap/Button';
 import "./App.css";
-
+import axios from 'axios';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
+      retrieved: false,
       token: null,
       item: {
         album: {
@@ -36,17 +40,17 @@ class App extends Component {
   
       no_top_tracks_data: false,
       top_artist_items: [ {name: ""}],
-      no_top_artists_data: false
-    };
+      no_top_artists_data: false,
 
-    this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
+    };
+    // this.getCurrentPlayer = this.getCurrentPlayer.bind(this);
+    // this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
     this.getTopTracks = this.getTopTracks.bind(this);
-    this.getTopArtists = this.getTopArtists.bind(this);
+    // this.getTopArtists = this.getTopArtists.bind(this);
     this.tick = this.tick.bind(this);
   }
 
   // runs after first render() lifecycle
-  
   componentDidMount() {
     // Set token
     let _token = hash.access_token;
@@ -54,15 +58,14 @@ class App extends Component {
     if (_token) {
       // Set token
       this.setState({
-        token: _token
+        token: _token,
       });
-      
-      this.getCurrentlyPlaying(_token);
+
+      // this.getCurrentPlayer(this.state.token);
+      // this.getCurrentlyPlaying(_token);
       this.getTopTracks(_token);
-      this.getTopArtists(_token);
+      // this.getTopArtists(_token);
     }
-    this.getTopTracks(this.state.token);
-    this.getTopArtists(this.state.token);
 
     // set interval for polling every 2 seconds
     this.interval = setInterval(() => this.tick(), 2000);
@@ -75,11 +78,81 @@ class App extends Component {
 
   tick() {
     if(this.state.token) {
-      this.getCurrentlyPlaying(this.state.token);
-      // this.getTopTracks(this.state.token);
+      // this.getCurrentPlayer(this.state.token);
+      // this.getCurrentlyPlaying(this.state.token);
+      this.getTopTracks(this.state.token);
       // this.getTopArtists(this.state.token);
     }
   }
+
+
+  // async getCurrentPlayer(token){
+  //   try{
+  //     const [response1, response2] = await Promise.all([
+  //       axios.get("https://api.spotify.com/v1/me/player", {
+  //         headers: {
+  //           Authorization: 'Bearer ' + token,
+  //         }
+  //       }),
+  //       axios.get("https://api.spotify.com/v1/me/top/tracks?time_range=short_term", {
+  //         headers: {
+  //           Authorization: 'Bearer ' + token,
+  //         }
+  //       })
+  //     ]);
+
+  //     if (!response1.data) {
+  //       this.setState({
+  //         no_data: true,
+  //       });
+  //       return;
+  //     }
+  //     if (!response2.data) {
+  //       this.setState({
+  //         no_top_tracks_data: true,
+  //       });
+  //       return;
+  //     }
+  //     this.setState({
+  //       item: response1.data.item,
+  //       is_playing: response1.data.is_playing,
+  //       progress_ms: response1.data.progress_ms,
+  //       no_data: false,
+
+  //       top_track_items: response2.data.items,
+  //       no_top_tracks_data: false,
+  //     });
+  //   } catch(error){
+  //     console.log(error);
+  //   }
+  // };
+
+
+
+  // getCurrentPlayer = async(token) => {
+  //   try{
+  //     const response = await axios.get("https://api.spotify.com/v1/me/player", {
+  //       headers: {
+  //         Authorization: 'Bearer ' + token,
+  //       }
+  //     });
+  //     if (!response.data) {
+  //       this.setState({
+  //         no_data: true,
+  //       });
+  //       return;
+  //     }
+  //     this.setState({
+  //       item: response.data.item,
+  //       is_playing: response.data.is_playing,
+  //       progress_ms: response.data.progress_ms,
+  //       no_data: false,
+  //     })
+  //   } catch(error){
+  //     console.log(error);
+  //   }
+  // };
+
 
   getCurrentlyPlaying(token) {
     // make a call using the token
@@ -108,37 +181,59 @@ class App extends Component {
     });
   }
 
-  getTopTracks(token) {
-    // make a call using token
-    $.ajax({
-      // url: "https://api.spotify.com/v1/me/top/tracks?limit=5",
-      // url: "https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=5",
-      url: "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5",
-      type: "GET",
-      beforeSend: xhr => {
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
-      },
-      success: data => {
-        // Checks if the data is not empty
-        if(!data) {
-          this.setState({
-            no_top_tracks_data: true,
-          });
-          return;
+  getTopTracks = async(token) => {
+    try{
+      const response = await axios.get(track_uri + short_uri, {
+        headers: {
+          Authorization: 'Bearer ' + token,
         }
-        
+      });
+      if (!response.data) {
         this.setState({
-          top_track_items: data.items,
-          no_top_tracks_data: false,
+          no_top_tracks_data: true,
         });
+        return;
       }
-    });
-  }
+      this.setState({
+        retrieved: true,
+        top_track_items: response.data.items,
+        no_top_tracks_data: false,
+      })
+    } catch(error){
+      console.log(error);
+    }
+  };
+
+  // getTopTracks(token) {
+  //   // make a call using token
+
+  //   $.ajax({
+  //     url: track_uri + short_uri,
+  //     type: "GET",
+  //     beforeSend: xhr => {
+  //       xhr.setRequestHeader("Authorization", "Bearer " + token);
+  //     },
+  //     success: data => {
+  //       // Checks if the data is not empty
+  //       if(!data) {
+  //         this.setState({
+  //           no_top_tracks_data: true,
+  //         });
+  //         return;
+  //       }
+        
+  //       this.setState({
+  //         top_track_items: data.items,
+  //         no_top_tracks_data: false,
+  //       });
+  //     }
+  //   });
+  // }
 
   getTopArtists(token) {
     // make a call using token
     $.ajax({
-      url: "https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5",
+      url: artist_uri + short_uri,
       type: "GET",
       beforeSend: xhr => {
         xhr.setRequestHeader("Authorization", "Bearer " + token);
@@ -164,54 +259,81 @@ class App extends Component {
     return (
       <div className="App">
         <div className="title">
-        spotify stats
+        stats for spotify
         </div>
         <header className="App-header">
 
           {/* login page */}
           {!this.state.token && (
-            <a
-              className="btn btn--loginApp-link"
-              href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
-                "%20"
-              )}&response_type=token&show_dialog=true`}
-            >
+            <Button className="login" href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
+              "%20"
+            )}&response_type=token&show_dialog=true`}>
               Login to Spotify
-            </a>
+            </Button>
+          )}
+
+          {
+            <p>
+              hello
+            </p>
+          }
+
+          {this.state.retrieved && (
+            <p>
+              retrieved
+            </p>
           )}
 
           {/* player */}
-          {this.state.token && !this.state.no_data && (
+          {/* {this.state.token && !this.state.no_data && (
             <Player
               item={this.state.item}
               is_playing={this.state.is_playing}
               progress_ms={this.state.progress_ms}
             />
-          )}
-          {this.state.no_data && (
+          )} */}
+          {/* {this.state.no_data && (
             <p>
               You're currently not playing anything on Spotify.
             </p>
+          )} */}
+
+          {/* toggle button */}
+
+          {this.state.token && (
+            <Toggle
+              
+            />
           )}
 
+          {/* {this.state.token && this.state.no_top_tracks_data && (
+            <p>
+              No top tracks data :/
+            </p>
+          )} */}
+
+          {/* {this.state.token && this.state.no_top_artists_data && (
+            <p>
+              No top artists data :/
+            </p>
+          )} */}
+
           {/* stats */}
-          {this.state.token && !this.state.no_top_tracks_data && !this.state.no_top_artists_data &&(  
+          {/* {this.state.token && !this.state.no_top_tracks_data && !this.state.no_top_artists_data &&(  
             <Top
               top_track_items={this.state.top_track_items}
               top_artist_items={this.state.top_artist_items}
             />
+          )} */}
+
+          {this.state.token && !this.state.no_top_tracks_data && this.state.retrieved &&(  
+            <Top
+              top_track_items={this.state.top_track_items}
+              // top_artist_items={this.state.top_artist_items}
+            />
           )}
 
-          {this.state.no_top_tracks_data && (
-            <p>
-              No top tracks data :/
-            </p>
-          )}
-          {this.state.no_top_artists_data && (
-            <p>
-              No top tracks data :/
-            </p>
-          )}
+          
         </header>
       </div>
     );

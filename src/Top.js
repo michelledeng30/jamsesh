@@ -9,7 +9,7 @@ const Top = props => {
 
         <div className="top-tracks">
         <ol>
-            <h2 className="top-tracks-header">Top Tracks</h2>
+            <h2 className="top-tracks-header">top tracks</h2>
             <li>{props.top_track_items[0].name} {" by "} {props.top_track_items[0].artists[0].name}</li>
             <li>{props.top_track_items[1].name} {" by "} {props.top_track_items[1].artists[0].name}</li>
             <li>{props.top_track_items[2].name} {" by "} {props.top_track_items[2].artists[0].name}</li>
@@ -18,16 +18,16 @@ const Top = props => {
         </ol>
         </div>
         
-        <div className="top-artists">
+        {/* <div className="top-artists">
         <ol>
-            <h2 className="top-artists-header">Top Artists</h2>
+            <h2 className="top-artists-header">top artists</h2>
             <li>{props.top_artist_items[0].name}</li>
             <li>{props.top_artist_items[1].name}</li>
             <li>{props.top_artist_items[2].name}</li>
             <li>{props.top_artist_items[3].name}</li>
             <li>{props.top_artist_items[4].name}</li>
         </ol>
-        </div>
+        </div> */}
 
       </div>
     </div>
