@@ -46,15 +46,9 @@ class App extends Component {
       top_artist_items: [ {name: ""}],
       retrieved_artists: false,
 
-      // button
-
-      button1_type: true,
-      button2_type: false,
-      button3_type: false,
-
       // other
 
-      time: short_uri,
+      time_range: short_uri,
 
     };
 
@@ -63,58 +57,41 @@ class App extends Component {
     this.getTopArtists = this.getTopArtists.bind(this);
     this.tick = this.tick.bind(this);
     
-    this.handleClick = this.handleClick.bind(this);
     this.handleClick1 = this.handleClick1.bind(this);
     this.handleClick2 = this.handleClick2.bind(this);
     this.handleClick3 = this.handleClick3.bind(this);
-    this.setTimeRange = this.setTimeRange.bind(this);
   }
 
-  handleClick() {
-    this.setTimeRange();
-    this.getTopTracks(this.state.token);
-    this.getTopArtists(this.state.token);
-  }
+
 
   handleClick1() {
+    this.getTopTracks(this.state.token, short_uri);
+    this.getTopArtists(this.state.token, short_uri);
     this.setState({
-        button1_type: true,
-        button2_type: false,
-        button3_type: false
+      time_range: short_uri
     });
-    this.setTimeRange();
-    this.getTopTracks(this.state.token);
-    this.getTopArtists(this.state.token);
   }
 
   handleClick2() {
+    this.getTopTracks(this.state.token, medium_uri);
+    this.getTopArtists(this.state.token, medium_uri);
     this.setState({
-        button1_type: false,
-        button2_type: true,
-        button3_type: false
+      time_range: medium_uri
     });
-    this.setTimeRange();
-    this.getTopTracks(this.state.token);
-    this.getTopArtists(this.state.token);
   }
 
   handleClick3() {
+    this.getTopTracks(this.state.token, long_uri);
+    this.getTopArtists(this.state.token, long_uri);
     this.setState({
-        button1_type: false,
-        button2_type: false,
-        button3_type: true
+      time_range: long_uri
     });
-    this.setTimeRange();
-    this.getTopTracks(this.state.token);
-    this.getTopArtists(this.state.token);
   }
 
   // runs after first render() lifecycle
   componentDidMount() {
     // Set token
     let _token = hash.access_token;
-
-    // const [active, setActive] = useState(this.state.button_types[0]);
 
     if (_token) {
       // Set token
@@ -123,9 +100,8 @@ class App extends Component {
       });
 
       this.getCurrentlyPlaying(_token);
-      this.setTimeRange()
-      this.getTopTracks(_token);
-      this.getTopArtists(_token);
+      this.getTopTracks(_token, short_uri);
+      this.getTopArtists(_token, short_uri);
     }
 
     // set interval for polling every 2 seconds
@@ -139,31 +115,10 @@ class App extends Component {
 
   tick() {
     if(this.state.token) {
-      this.setTimeRange()
       this.getCurrentlyPlaying(this.state.token);
     }
   }
 
-  setTimeRange() {
-    if (this.state.button1_type) {
-      this.setState({
-        time: short_uri
-      })
-      return;
-    }
-    if (this.state.button2_type) {
-      this.setState({
-        time: medium_uri
-      })
-      return;
-    }
-    if (this.state.button3_type) {
-      this.setState({
-        time: long_uri
-      })
-      return;
-    }
-  }
 
 
   getCurrentlyPlaying(token) {
@@ -193,10 +148,10 @@ class App extends Component {
     });
   }
 
-  getTopTracks(token) {
+  getTopTracks(token, length) {
     // make a call using the token
     $.ajax({
-      url: track_uri + this.state.time,
+      url: track_uri + length,
       type: "GET",
       beforeSend: xhr => {
         xhr.setRequestHeader("Authorization", "Bearer " + token);
@@ -210,9 +165,9 @@ class App extends Component {
     });
   }
 
-  getTopArtists = async(token) => {
+  getTopArtists = async(token, length) => {
     try{
-      const response = await axios.get(artist_uri + this.state.time, {
+      const response = await axios.get(artist_uri + length, {
         headers: {
           Authorization: 'Bearer ' + token,
         }
@@ -265,21 +220,12 @@ class App extends Component {
 
           {this.state.token && (
             <ToggleButtons 
-              handleClick={this.handleClick}
+              time_range={this.state.time_range}
               handleClick1={this.handleClick1}
               handleClick2={this.handleClick2}
               handleClick3={this.handleClick3}
-              button1_type={this.state.button1_type}
-              button2_type={this.state.button2_type}
-              button3_type={this.state.button3_type}
             />
           )}
-{/*     
-          {this.state.token && (
-            <ToggleButtons>
-
-            </ToggleButtons>
-          )} */}
 
           {/* stats */}
 

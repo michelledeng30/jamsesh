@@ -1,5 +1,7 @@
 import React, { Component} from "react";
 import "./Toggle.css";
+import { short_uri, medium_uri, long_uri } from "./const";
+
 // import Button from 'react-bootstrap/Button';
 // import ButtonGroup from 'react-bootstrap/Button';
 // import styled from 'styled-components';
@@ -8,10 +10,19 @@ import "./Toggle.css";
 export class ToggleButtons extends Component {
 
     render() {
+        let button1_color = "not-pressed";
+        let button2_color = "not-pressed";
+        let button3_color = "not-pressed";
         
-        let button1_color = this.props.button1_type ? "pressed" : "not-pressed";
-        let button2_color = this.props.button2_type ? "pressed" : "not-pressed";
-        let button3_color = this.props.button3_type ? "pressed" : "not-pressed";
+        if(this.props.time_range === short_uri) {
+            button1_color = "pressed";
+        }
+        if(this.props.time_range === medium_uri) {
+            button2_color = "pressed";
+        }
+        if(this.props.time_range === long_uri) {
+            button3_color = "pressed";
+        }
 
         return (
             <div>
