@@ -6,6 +6,7 @@ import hash from "./hash";
 import Player from "./Player";
 import Top from "./Top";
 import ToggleButtons from "./Toggle";
+import Genres from "./Genres"
 import Button from 'react-bootstrap/Button';
 import "./App.css";
 import axios from 'axios';
@@ -43,7 +44,11 @@ class App extends Component {
       
       // top artists
       
-      top_artist_items: [ {name: ""}],
+      top_artist_items: [{
+        genres: [],
+        images: [{ url: "" }],
+        name: ""
+      }],
       retrieved_artists: false,
 
       // other
@@ -61,8 +66,6 @@ class App extends Component {
     this.handleClick2 = this.handleClick2.bind(this);
     this.handleClick3 = this.handleClick3.bind(this);
   }
-
-
 
   handleClick1() {
     this.getTopTracks(this.state.token, short_uri);
@@ -118,8 +121,6 @@ class App extends Component {
       this.getCurrentlyPlaying(this.state.token);
     }
   }
-
-
 
   getCurrentlyPlaying(token) {
     // make a call using the token
@@ -182,9 +183,6 @@ class App extends Component {
     }
   };
 
-
-
-
   render() {
     return (
       <div className="App">
@@ -229,9 +227,17 @@ class App extends Component {
 
           {/* stats */}
 
-          {this.state.token && !this.state.no_top_tracks_data && this.state.retrieved_tracks && this.state.retrieved_artists &&(  
+          {this.state.token && this.state.retrieved_tracks && this.state.retrieved_artists &&(  
             <Top
               top_track_items={this.state.top_track_items}
+              top_artist_items={this.state.top_artist_items}
+            />
+          )}
+
+          {/* genres */}
+
+          {this.state.token &&this.state.retrieved_artists &&(
+            <Genres
               top_artist_items={this.state.top_artist_items}
             />
           )}

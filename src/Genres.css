@@ -1,0 +1,9 @@
+.genres-list {
+    list-style-position:inside;
+    font-size:0.8em;
+    line-height:25px;
+}
+
+.genres-header {
+    padding-bottom:15px;
+}

@@ -7,14 +7,24 @@
 .top-tracks {
     float: left;
     width: 50%;
-    font-size:0.7em;
-    list-style-position:inside;
 }
+
 .top-artists {
     float: right;
     width: 50%;
-    font-size:0.7em;
+}
+
+.top-tracks-list {
     list-style-position:inside;
+    font-size:0.8em;
+    line-height:25px;
+    margin:10px;
+}
+
+.top-artists-list {
+    list-style-position:inside;
+    font-size:0.8em;
+    line-height:25px;
 }
 
 .top-tracks-header {
@@ -25,4 +35,8 @@
     padding-bottom:15px;
 }
 
+.top-artist-img img {
+    width: 40%;
+    padding-bottom: 15px;
+}
 

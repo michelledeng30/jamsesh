@@ -13,7 +13,7 @@ export class ToggleButtons extends Component {
         let button1_color = "not-pressed";
         let button2_color = "not-pressed";
         let button3_color = "not-pressed";
-        
+
         if(this.props.time_range === short_uri) {
             button1_color = "pressed";
         }
@@ -31,7 +31,7 @@ export class ToggleButtons extends Component {
                         last month
                     </button>
                     <button className={button2_color} onClick={this.props.handleClick2}>
-                        last 6 months
+                        six months
                         </button>
                     <button className={button3_color} onClick={this.props.handleClick3}>
                         all-time

@@ -10,7 +10,8 @@
     padding: 10px 24px;
     cursor:pointer;
     float:left;
-    font-size:1.5em;
+    font-size:30px;
+    width:210px;
 }
 
 /* .button-group button:not(:last-child) {
