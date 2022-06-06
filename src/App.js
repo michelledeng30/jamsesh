@@ -5,7 +5,7 @@ import { track_uri, artist_uri, short_uri, medium_uri, long_uri } from "./const"
 import hash from "./hash";
 import Player from "./Player";
 import Top from "./Top";
-import Toggle from "./Toggle";
+import ToggleButtons from "./Toggle";
 import Button from 'react-bootstrap/Button';
 import "./App.css";
 import axios from 'axios';
@@ -14,7 +14,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      retrieved: false,
+      // player
       token: null,
       item: {
         album: {
@@ -28,6 +28,8 @@ class App extends Component {
       progress_ms: 0,
       no_data: false,
 
+      // top tracks
+
       top_track_items: [{
         item: {
           album: {
@@ -37,17 +39,74 @@ class App extends Component {
           artists: [{ name: "" }],
         }
       }],
-  
-      no_top_tracks_data: false,
+      retrieved_tracks: false,
+      
+      // top artists
+      
       top_artist_items: [ {name: ""}],
-      no_top_artists_data: false,
+      retrieved_artists: false,
+
+      // button
+
+      button1_type: true,
+      button2_type: false,
+      button3_type: false,
+
+      // other
+
+      time: short_uri,
 
     };
-    // this.getCurrentPlayer = this.getCurrentPlayer.bind(this);
-    // this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
+
+    this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
     this.getTopTracks = this.getTopTracks.bind(this);
-    // this.getTopArtists = this.getTopArtists.bind(this);
+    this.getTopArtists = this.getTopArtists.bind(this);
     this.tick = this.tick.bind(this);
+    
+    this.handleClick = this.handleClick.bind(this);
+    this.handleClick1 = this.handleClick1.bind(this);
+    this.handleClick2 = this.handleClick2.bind(this);
+    this.handleClick3 = this.handleClick3.bind(this);
+    this.setTimeRange = this.setTimeRange.bind(this);
+  }
+
+  handleClick() {
+    this.setTimeRange();
+    this.getTopTracks(this.state.token);
+    this.getTopArtists(this.state.token);
+  }
+
+  handleClick1() {
+    this.setState({
+        button1_type: true,
+        button2_type: false,
+        button3_type: false
+    });
+    this.setTimeRange();
+    this.getTopTracks(this.state.token);
+    this.getTopArtists(this.state.token);
+  }
+
+  handleClick2() {
+    this.setState({
+        button1_type: false,
+        button2_type: true,
+        button3_type: false
+    });
+    this.setTimeRange();
+    this.getTopTracks(this.state.token);
+    this.getTopArtists(this.state.token);
+  }
+
+  handleClick3() {
+    this.setState({
+        button1_type: false,
+        button2_type: false,
+        button3_type: true
+    });
+    this.setTimeRange();
+    this.getTopTracks(this.state.token);
+    this.getTopArtists(this.state.token);
   }
 
   // runs after first render() lifecycle
@@ -55,20 +114,22 @@ class App extends Component {
     // Set token
     let _token = hash.access_token;
 
+    // const [active, setActive] = useState(this.state.button_types[0]);
+
     if (_token) {
       // Set token
       this.setState({
         token: _token,
       });
 
-      // this.getCurrentPlayer(this.state.token);
-      // this.getCurrentlyPlaying(_token);
+      this.getCurrentlyPlaying(_token);
+      this.setTimeRange()
       this.getTopTracks(_token);
-      // this.getTopArtists(_token);
+      this.getTopArtists(_token);
     }
 
     // set interval for polling every 2 seconds
-    this.interval = setInterval(() => this.tick(), 2000);
+    this.interval = setInterval(() => this.tick(), 500);
   }
 
   componentWillUnmount() {
@@ -78,80 +139,31 @@ class App extends Component {
 
   tick() {
     if(this.state.token) {
-      // this.getCurrentPlayer(this.state.token);
-      // this.getCurrentlyPlaying(this.state.token);
-      this.getTopTracks(this.state.token);
-      // this.getTopArtists(this.state.token);
+      this.setTimeRange()
+      this.getCurrentlyPlaying(this.state.token);
     }
   }
 
-
-  // async getCurrentPlayer(token){
-  //   try{
-  //     const [response1, response2] = await Promise.all([
-  //       axios.get("https://api.spotify.com/v1/me/player", {
-  //         headers: {
-  //           Authorization: 'Bearer ' + token,
-  //         }
-  //       }),
-  //       axios.get("https://api.spotify.com/v1/me/top/tracks?time_range=short_term", {
-  //         headers: {
-  //           Authorization: 'Bearer ' + token,
-  //         }
-  //       })
-  //     ]);
-
-  //     if (!response1.data) {
-  //       this.setState({
-  //         no_data: true,
-  //       });
-  //       return;
-  //     }
-  //     if (!response2.data) {
-  //       this.setState({
-  //         no_top_tracks_data: true,
-  //       });
-  //       return;
-  //     }
-  //     this.setState({
-  //       item: response1.data.item,
-  //       is_playing: response1.data.is_playing,
-  //       progress_ms: response1.data.progress_ms,
-  //       no_data: false,
-
-  //       top_track_items: response2.data.items,
-  //       no_top_tracks_data: false,
-  //     });
-  //   } catch(error){
-  //     console.log(error);
-  //   }
-  // };
-
-
-
-  // getCurrentPlayer = async(token) => {
-  //   try{
-  //     const response = await axios.get("https://api.spotify.com/v1/me/player", {
-  //       headers: {
-  //         Authorization: 'Bearer ' + token,
-  //       }
-  //     });
-  //     if (!response.data) {
-  //       this.setState({
-  //         no_data: true,
-  //       });
-  //       return;
-  //     }
-  //     this.setState({
-  //       item: response.data.item,
-  //       is_playing: response.data.is_playing,
-  //       progress_ms: response.data.progress_ms,
-  //       no_data: false,
-  //     })
-  //   } catch(error){
-  //     console.log(error);
-  //   }
-  // };
+  setTimeRange() {
+    if (this.state.button1_type) {
+      this.setState({
+        time: short_uri
+      })
+      return;
+    }
+    if (this.state.button2_type) {
+      this.setState({
+        time: medium_uri
+      })
+      return;
+    }
+    if (this.state.button3_type) {
+      this.setState({
+        time: long_uri
+      })
+      return;
+    }
+  }
 
 
   getCurrentlyPlaying(token) {
@@ -181,79 +193,42 @@ class App extends Component {
     });
   }
 
-  getTopTracks = async(token) => {
+  getTopTracks(token) {
+    // make a call using the token
+    $.ajax({
+      url: track_uri + this.state.time,
+      type: "GET",
+      beforeSend: xhr => {
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+      },
+      success: data => {
+        this.setState({
+          retrieved_tracks: true,
+          top_track_items: data.items,
+        })
+      }
+    });
+  }
+
+  getTopArtists = async(token) => {
     try{
-      const response = await axios.get(track_uri + short_uri, {
+      const response = await axios.get(artist_uri + this.state.time, {
         headers: {
           Authorization: 'Bearer ' + token,
         }
       });
-      if (!response.data) {
-        this.setState({
-          no_top_tracks_data: true,
-        });
-        return;
-      }
+
       this.setState({
-        retrieved: true,
-        top_track_items: response.data.items,
-        no_top_tracks_data: false,
+        retrieved_artists: true,
+        top_artist_items: response.data.items,
       })
     } catch(error){
       console.log(error);
     }
   };
 
-  // getTopTracks(token) {
-  //   // make a call using token
 
-  //   $.ajax({
-  //     url: track_uri + short_uri,
-  //     type: "GET",
-  //     beforeSend: xhr => {
-  //       xhr.setRequestHeader("Authorization", "Bearer " + token);
-  //     },
-  //     success: data => {
-  //       // Checks if the data is not empty
-  //       if(!data) {
-  //         this.setState({
-  //           no_top_tracks_data: true,
-  //         });
-  //         return;
-  //       }
-        
-  //       this.setState({
-  //         top_track_items: data.items,
-  //         no_top_tracks_data: false,
-  //       });
-  //     }
-  //   });
-  // }
 
-  getTopArtists(token) {
-    // make a call using token
-    $.ajax({
-      url: artist_uri + short_uri,
-      type: "GET",
-      beforeSend: xhr => {
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
-      },
-      success: data => {
-        // Checks if the data is not empty
-        if(!data) {
-          this.setState({
-            no_top_artists_data: true,
-          });
-          return;
-        }
-        
-        this.setState({
-          top_artist_items: data.items,
-          no_top_artists_data: false,
-        });
-      }
-    });
-  }
 
   render() {
     return (
@@ -272,67 +247,48 @@ class App extends Component {
             </Button>
           )}
 
-          {
-            <p>
-              hello
-            </p>
-          }
-
-          {this.state.retrieved && (
-            <p>
-              retrieved
-            </p>
-          )}
-
           {/* player */}
-          {/* {this.state.token && !this.state.no_data && (
+          {this.state.token && !this.state.no_data && (
             <Player
               item={this.state.item}
               is_playing={this.state.is_playing}
               progress_ms={this.state.progress_ms}
             />
-          )} */}
-          {/* {this.state.no_data && (
+          )}
+          {this.state.no_data && (
             <p>
               You're currently not playing anything on Spotify.
             </p>
-          )} */}
+          )}
 
           {/* toggle button */}
 
           {this.state.token && (
-            <Toggle
-              
+            <ToggleButtons 
+              handleClick={this.handleClick}
+              handleClick1={this.handleClick1}
+              handleClick2={this.handleClick2}
+              handleClick3={this.handleClick3}
+              button1_type={this.state.button1_type}
+              button2_type={this.state.button2_type}
+              button3_type={this.state.button3_type}
             />
           )}
+{/*     
+          {this.state.token && (
+            <ToggleButtons>
 
-          {/* {this.state.token && this.state.no_top_tracks_data && (
-            <p>
-              No top tracks data :/
-            </p>
-          )} */}
-
-          {/* {this.state.token && this.state.no_top_artists_data && (
-            <p>
-              No top artists data :/
-            </p>
+            </ToggleButtons>
           )} */}
 
           {/* stats */}
-          {/* {this.state.token && !this.state.no_top_tracks_data && !this.state.no_top_artists_data &&(  
+
+          {this.state.token && !this.state.no_top_tracks_data && this.state.retrieved_tracks && this.state.retrieved_artists &&(  
             <Top
               top_track_items={this.state.top_track_items}
               top_artist_items={this.state.top_artist_items}
             />
-          )} */}
-
-          {this.state.token && !this.state.no_top_tracks_data && this.state.retrieved &&(  
-            <Top
-              top_track_items={this.state.top_track_items}
-              // top_artist_items={this.state.top_artist_items}
-            />
           )}
-
           
         </header>
       </div>

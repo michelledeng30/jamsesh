@@ -18,7 +18,7 @@ const Top = props => {
         </ol>
         </div>
         
-        {/* <div className="top-artists">
+        <div className="top-artists">
         <ol>
             <h2 className="top-artists-header">top artists</h2>
             <li>{props.top_artist_items[0].name}</li>
@@ -27,7 +27,7 @@ const Top = props => {
             <li>{props.top_artist_items[3].name}</li>
             <li>{props.top_artist_items[4].name}</li>
         </ol>
-        </div> */}
+        </div>
 
       </div>
     </div>
