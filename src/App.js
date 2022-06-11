@@ -7,7 +7,9 @@ import Player from "./Player";
 import Top from "./Top";
 import ToggleButtons from "./Toggle";
 import Genres from "./Genres"
+import Color from "./Color";
 import Button from 'react-bootstrap/Button';
+
 import "./App.css";
 import axios from 'axios';
 
@@ -25,7 +27,7 @@ class App extends Component {
         artists: [{ name: "" }],
         duration_ms: 0
       },
-      is_playing: "Paused",
+      is_playing: "paused",
       progress_ms: 0,
       no_data: false,
 
@@ -54,6 +56,7 @@ class App extends Component {
       // other
 
       time_range: short_uri,
+      color: 'green',
 
     };
 
@@ -65,6 +68,10 @@ class App extends Component {
     this.handleClick1 = this.handleClick1.bind(this);
     this.handleClick2 = this.handleClick2.bind(this);
     this.handleClick3 = this.handleClick3.bind(this);
+
+    this.green = this.green.bind(this);
+    this.pink = this.pink.bind(this);
+    this.brown = this.brown.bind(this);
   }
 
   handleClick1() {
@@ -88,6 +95,24 @@ class App extends Component {
     this.getTopArtists(this.state.token, long_uri);
     this.setState({
       time_range: long_uri
+    });
+  }
+
+  green() {
+    this.setState({
+      color: 'green'
+    });
+  }
+
+  pink() {
+    this.setState({
+      color: 'pink'
+    });
+  }
+
+  brown() {
+    this.setState({
+      color: 'brown'
     });
   }
 
@@ -185,65 +210,81 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <div className="title">
-        stats for spotify
-        </div>
-        <header className="App-header">
-
-          {/* login page */}
-          {!this.state.token && (
-            <Button className="login" href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
-              "%20"
-            )}&response_type=token&show_dialog=true`}>
-              Login to Spotify
-            </Button>
-          )}
-
-          {/* player */}
-          {this.state.token && !this.state.no_data && (
-            <Player
-              item={this.state.item}
-              is_playing={this.state.is_playing}
-              progress_ms={this.state.progress_ms}
-            />
-          )}
-          {this.state.no_data && (
-            <p>
-              You're currently not playing anything on Spotify.
-            </p>
-          )}
-
-          {/* toggle button */}
-
-          {this.state.token && (
-            <ToggleButtons 
-              time_range={this.state.time_range}
-              handleClick1={this.handleClick1}
-              handleClick2={this.handleClick2}
-              handleClick3={this.handleClick3}
-            />
-          )}
-
-          {/* stats */}
-
-          {this.state.token && this.state.retrieved_tracks && this.state.retrieved_artists &&(  
-            <Top
-              top_track_items={this.state.top_track_items}
-              top_artist_items={this.state.top_artist_items}
-            />
-          )}
-
-          {/* genres */}
-
-          {this.state.token &&this.state.retrieved_artists &&(
-            <Genres
-              top_artist_items={this.state.top_artist_items}
-            />
-          )}
+      <div className={this.state.color}>
+        <div className="App">
           
-        </header>
+          <div className="title">
+          JamSesh
+          </div>
+
+          <header className="App-header">
+            
+
+            {/* login page */}
+            {!this.state.token && (
+              <Button className="login" href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
+                "%20"
+              )}&response_type=token&show_dialog=true`}>
+                Login to Spotify
+              </Button>
+            )}
+
+            {/* color toggle */}
+
+            {this.state.token && (
+              <Color
+                green={this.green}
+                pink={this.pink}
+                brown={this.brown}
+              />
+            )}
+
+            {/* player */}
+            {this.state.token && !this.state.no_data && (
+              <Player
+                item={this.state.item}
+                is_playing={this.state.is_playing}
+                progress_ms={this.state.progress_ms}
+              />
+            )}
+            {this.state.no_data && (
+              <p>
+                You're currently not playing anything on Spotify.
+              </p>
+            )}
+
+            {/* toggle button */}
+
+            {this.state.token && (
+              <ToggleButtons 
+                time_range={this.state.time_range}
+                handleClick1={this.handleClick1}
+                handleClick2={this.handleClick2}
+                handleClick3={this.handleClick3}
+              />
+            )}
+
+            {/* stats */}
+
+            {this.state.token && this.state.retrieved_tracks && this.state.retrieved_artists &&(  
+              <Top
+                top_track_items={this.state.top_track_items}
+                top_artist_items={this.state.top_artist_items}
+              />
+            )}
+
+            {/* genres */}
+
+            {this.state.token &&this.state.retrieved_artists &&(
+              <Genres
+                top_artist_items={this.state.top_artist_items}
+              />
+            )}
+            
+          </header>
+        </div>
       </div>
+      
     );
   }
 }

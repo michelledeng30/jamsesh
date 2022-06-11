@@ -1,10 +1,22 @@
 .App {
   text-align: center;
-  background-color: #f1be77;
+  /* background-color: #f1be77; */
   /* font-family:'Ubuntu'; */
   font-family:Verdana, Geneva, Tahoma, sans-serif;
-  color:#323232;
+  /* color:#323232; */
   padding:20px;
+}
+
+.green {
+  background-color:#6da871;
+}
+
+.pink {
+  background-color:#e2a4bd;
+}
+
+.brown {
+  background-color:#765b39;
 }
 
 .App-logo {
@@ -14,7 +26,7 @@
 }
 
 .title {
-  font-size:2em;
+  font-size:2.5em;
   font-weight:bold;
   padding-top:25px;
   padding-bottom:25px;

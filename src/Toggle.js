@@ -1,4 +1,4 @@
-import React, { Component} from "react";
+import React, { Component } from "react";
 import "./Toggle.css";
 import { short_uri, medium_uri, long_uri } from "./const";
 

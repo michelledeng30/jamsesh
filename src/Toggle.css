@@ -12,17 +12,19 @@
     float:left;
     font-size:30px;
     width:210px;
+    background-color:transparent;
 }
 
-/* .button-group button:not(:last-child) {
+.button-group button:not(:last-child) {
     border-right: none;
-} */
+}
 
 .pressed {
-    background-color: #e0a24b;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3) 0 0);
 }
-.not-pressed{
-    background-color: #f1be77;
+
+.button-group button:hover {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3) 0 0);
 }
 
 .button-group:after {
@@ -31,7 +33,3 @@
     display:table;
 }
 
-.button-group button:hover {
-    background-color: #e0a24b;
-    opacity:1;
-  }
