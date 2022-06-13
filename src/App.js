@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as $ from "jquery";
 import { authEndpoint, clientId, redirectUri, scopes } from "./const";
 import { track_uri, artist_uri, short_uri, medium_uri, long_uri } from "./const";
+import { sage, retro, bubblegum } from "./colors"
 import hash from "./hash";
 import Player from "./Player";
 import Top from "./Top";
@@ -9,7 +10,7 @@ import ToggleButtons from "./Toggle";
 import Genres from "./Genres"
 import Color from "./Color";
 import Button from 'react-bootstrap/Button';
-
+import radio from './images/Radio.png';
 import "./App.css";
 import axios from 'axios';
 
@@ -56,7 +57,8 @@ class App extends Component {
       // other
 
       time_range: short_uri,
-      color: 'green',
+
+      current_color: sage,
 
     };
 
@@ -69,9 +71,10 @@ class App extends Component {
     this.handleClick2 = this.handleClick2.bind(this);
     this.handleClick3 = this.handleClick3.bind(this);
 
-    this.green = this.green.bind(this);
-    this.pink = this.pink.bind(this);
-    this.brown = this.brown.bind(this);
+    this.setSage = this.setSage.bind(this);
+    this.setRetro = this.setRetro.bind(this);
+    this.setBubblegum = this.setBubblegum.bind(this);
+    // this.brown = this.brown.bind(this);
   }
 
   handleClick1() {
@@ -98,23 +101,29 @@ class App extends Component {
     });
   }
 
-  green() {
+  setSage() {
     this.setState({
-      color: 'green'
+      current_color: sage
     });
   }
 
-  pink() {
+  setRetro() {
     this.setState({
-      color: 'pink'
+      current_color: retro
     });
   }
 
-  brown() {
+  setBubblegum() {
     this.setState({
-      color: 'brown'
+      current_color: bubblegum
     });
   }
+
+  // brown() {
+  //   this.setState({
+  //     color: 'brown'
+  //   });
+  // }
 
   // runs after first render() lifecycle
   componentDidMount() {
@@ -210,79 +219,95 @@ class App extends Component {
 
   render() {
     return (
-      <div className={this.state.color}>
-        <div className="App">
-          
-          <div className="title">
-          JamSesh
-          </div>
 
-          <header className="App-header">
-            
+      <div className="App" style={{backgroundColor: this.state.current_color[1]}}>
+        
+        
 
-            {/* login page */}
-            {!this.state.token && (
-              <Button className="login" href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
-                "%20"
-              )}&response_type=token&show_dialog=true`}>
-                Login to Spotify
-              </Button>
-            )}
-
-            {/* color toggle */}
-
-            {this.state.token && (
-              <Color
-                green={this.green}
-                pink={this.pink}
-                brown={this.brown}
-              />
-            )}
-
-            {/* player */}
-            {this.state.token && !this.state.no_data && (
-              <Player
-                item={this.state.item}
-                is_playing={this.state.is_playing}
-                progress_ms={this.state.progress_ms}
-              />
-            )}
-            {this.state.no_data && (
-              <p>
-                You're currently not playing anything on Spotify.
-              </p>
-            )}
-
-            {/* toggle button */}
-
-            {this.state.token && (
-              <ToggleButtons 
-                time_range={this.state.time_range}
-                handleClick1={this.handleClick1}
-                handleClick2={this.handleClick2}
-                handleClick3={this.handleClick3}
-              />
-            )}
-
-            {/* stats */}
-
-            {this.state.token && this.state.retrieved_tracks && this.state.retrieved_artists &&(  
-              <Top
-                top_track_items={this.state.top_track_items}
-                top_artist_items={this.state.top_artist_items}
-              />
-            )}
-
-            {/* genres */}
-
-            {this.state.token &&this.state.retrieved_artists &&(
-              <Genres
-                top_artist_items={this.state.top_artist_items}
-              />
-            )}
-            
-          </header>
+        <header className="App-header">
+        <div className="title">
+        JamSesh
         </div>
+          
+
+          {/* login page */}
+          {!this.state.token && (
+            <Button className="login" href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
+              "%20"
+            )}&response_type=token&show_dialog=true`}>
+              Login to Spotify
+            </Button>
+          )}
+
+          {/* color toggle */}
+
+          {this.state.token && (
+            <Color
+
+              setSage={this.setSage}
+              setRetro={this.setRetro}
+              setBubblegum={this.setBubblegum}
+              // brown={this.brown}
+              current_color={this.state.current_color}
+            />
+          )}
+
+          {/* player */}
+          
+          {this.state.token && !this.state.no_data && (
+              <div className="pb-14 flex flex-col items-center h-full w-full">
+                <div className="h-4/5 w-3/4 container relative">
+                    <img className="absolute w-auto h-auto" src={radio} alt="radio"></img>
+                    <div className="pt-20 object-contain max-w-fit max-h-fit">
+                        <Player
+                          item={this.state.item}
+                          is_playing={this.state.is_playing}
+                          progress_ms={this.state.progress_ms}
+                          current_color={this.state.current_color}
+                        />
+                    </div>
+                </div>
+              </div>
+
+
+          )}
+          {this.state.no_data && (
+            <p>
+              You're currently not playing anything on Spotify.
+            </p>
+          )}
+
+          {/* toggle button */}
+
+          {this.state.token && (
+            <ToggleButtons 
+              time_range={this.state.time_range}
+              handleClick1={this.handleClick1}
+              handleClick2={this.handleClick2}
+              handleClick3={this.handleClick3}
+            />
+          )}
+
+          {/* stats */}
+
+          {this.state.token && this.state.retrieved_tracks && this.state.retrieved_artists &&(  
+            <Top
+              top_track_items={this.state.top_track_items}
+              top_artist_items={this.state.top_artist_items}
+              current_color={this.state.current_color}
+            />
+          )}
+
+          {/* genres */}
+
+          {this.state.token &&this.state.retrieved_artists &&(
+            <Genres
+              top_artist_items={this.state.top_artist_items}
+              current_color={this.state.current_color}
+            />
+          )}
+          
+        </header>
       </div>
       
     );

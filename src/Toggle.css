@@ -1,6 +1,7 @@
-.toggle-header {
-    padding-top:25px;
-}
+/* .toggle-header {
+    padding-top:5px;
+
+} */
 
 .button-group button {
     /* background-color: rgb(219, 175, 239); */
@@ -10,7 +11,7 @@
     padding: 10px 24px;
     cursor:pointer;
     float:left;
-    font-size:30px;
+    font-size:25px;
     width:210px;
     background-color:transparent;
 }

@@ -6,4 +6,13 @@
 
 .genres-header {
     padding-bottom:15px;
+    font-weight:bold;
+}
+
+.genres-box {
+    display: flex;
+    padding: 25px;
+    background: #A3B899;
+    border: 2px solid #6B6666;
+    border-radius:20px;
 }

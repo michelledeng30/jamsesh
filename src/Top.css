@@ -1,18 +1,32 @@
 .top-wrapper {
-    display: flex;
     padding-top:25px;
     column-gap:30px;
 }
 
-.top-tracks {
+.tracks-box {
+    display: flex;
+    padding: 25px;
+    background: #A3B899;
+    border: 2px solid #6B6666;
+    border-radius:20px;
     float: left;
-    width: 50%;
+    width: 45%;
 }
 
-.top-artists {
+/* .top-tracks {
+    
+} */
+
+.artists-box {
+    display: flex;
+    padding: 25px;
+    background: #A3B899;
+    border: 2px solid #6B6666;
+    border-radius:20px;
     float: right;
-    width: 50%;
-}
+    width: 45%;
+  }
+
 
 .top-tracks-list {
     list-style-position:inside;
@@ -29,14 +43,18 @@
 
 .top-tracks-header {
     padding-bottom:15px;
+    font-weight: bold;
 }
 
 .top-artists-header {
     padding-bottom:15px;
+    font-weight: bold;
+    align-items: center;
 }
 
 .top-artist-img img {
-    width: 40%;
+    /* width: 80%; */
+    /* float: none; */
     padding-bottom: 15px;
 }
 

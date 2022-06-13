@@ -1,23 +1,15 @@
 .App {
   text-align: center;
-  /* background-color: #f1be77; */
   /* font-family:'Ubuntu'; */
   font-family:Verdana, Geneva, Tahoma, sans-serif;
   /* color:#323232; */
+  color: #414141;
   padding:20px;
+  /* height:100vh; */
+  /* width:50vw; */
+
 }
 
-.green {
-  background-color:#6da871;
-}
-
-.pink {
-  background-color:#e2a4bd;
-}
-
-.brown {
-  background-color:#765b39;
-}
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
@@ -39,6 +31,7 @@
   align-items: center;
   justify-content: top;
   font-size: calc(10px + 2vmin);
+  max-width:800px;
   margin:auto;
 }
 
@@ -67,7 +60,6 @@ html, body {
 
 body {
   background-color: #333;
-  color: #eee;
   font-family: Helvetica, Arial;
   font-size: 3vmin;
 }

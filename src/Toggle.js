@@ -26,17 +26,20 @@ export class ToggleButtons extends Component {
 
         return (
             <div>
-                <div className="button-group">
-                    <button className={button1_color} onClick={this.props.handleClick1}>
-                        last month
-                    </button>
-                    <button className={button2_color} onClick={this.props.handleClick2}>
-                        six months
+                <div className="toggle-header">
+                    <div className="button-group">
+                        <button className={button1_color} onClick={this.props.handleClick1}>
+                            last month
                         </button>
-                    <button className={button3_color} onClick={this.props.handleClick3}>
-                        all-time
-                    </button>
+                        <button className={button2_color} onClick={this.props.handleClick2}>
+                            six months
+                            </button>
+                        <button className={button3_color} onClick={this.props.handleClick3}>
+                            all-time
+                        </button>
+                    </div>
                 </div>
+
             </div>
         )
     }

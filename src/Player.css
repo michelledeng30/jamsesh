@@ -1,27 +1,35 @@
 .player-wrapper {
-  align-items: center;
   display: flex;
+  align-items: center;
   height: 100%;
-  margin: 0 auto;
+  margin: 10px auto;
   justify-content: center;
   position: relative;
-  width: 80%;
+  width: 90%;
   z-index: 1;
-  padding-bottom:25px;
+  /* padding: 25px; */
+  /* padding-bottom:25px; */
 }
+
 /** Now Playing **/
 
 .now-playing__name {
-  font-size: 1.5em;
-  margin-bottom: 0.2em;
+  font-size: 4vw;
+  margin:0.5em;
+  margin-bottom: 0.1em;
+  font-weight:bold;
 }
+
 
 .now-playing__artist {
-  margin-bottom: 1em;
+  font-size: 2.75vw;
+  margin-bottom: 0.5em;
 }
 
+
 .now-playing__status {
-  margin-bottom: 1em;
+  font-size: 2vw;
+  margin-bottom: 0.5em;
 }
 
 .now-playing__img {
@@ -44,13 +52,13 @@
 /** Progress **/
 
 .progress {
-  border: 1px solid #eee;
+  border: 1px solid #414141;
   height: 6px;
   border-radius: 3px;
   overflow: hidden;
 }
 
 .progress__bar {
-  background-color: #eee;
+  background-color: #414141;
   height: 4px;
 }

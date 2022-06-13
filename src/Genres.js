@@ -27,16 +27,21 @@ const Genres = props => {
 
     let freq_hash = getRankings();
     let rankings = (Object.keys(freq_hash)).slice(0, 10);
+    const genres_color = props.current_color[4]
 
     return (
         <div className="App">
-            <div className="genres-wrapper">
-                <h2 className="genres-header">top genres</h2>
-                <ol className="genres-list">
-                    {rankings.map((current_genre) => (
-                        <li>{current_genre}</li>
-                    ))}
-                </ol>
+
+            <div className="genres-box" style={{backgroundColor: genres_color}}>
+                <div className="genres">
+                    <h2 className="genres-header">top genres</h2>
+                    <ol className="genres-list">
+                        {rankings.map((current_genre) => (
+                            <li>{current_genre}</li>
+                        ))}
+                    </ol>
+                </div>
+
             </div>
         </div>
     );
