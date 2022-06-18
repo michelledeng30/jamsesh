@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import * as $ from "jquery";
 import { authEndpoint, clientId, redirectUri, scopes } from "./const";
-import { track_uri, artist_uri, short_uri, medium_uri, long_uri } from "./const";
+import { track_uri, artist_uri, short_uri, medium_uri, long_uri } from "./const"
+import { pause_uri, play_uri } from "./const";
 import { sage, retro, bubblegum } from "./colors"
 import hash from "./hash";
 import Player from "./Player";
@@ -59,22 +60,29 @@ class App extends Component {
       time_range: short_uri,
 
       current_color: sage,
+      device_info: '',
 
     };
 
     this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
     this.getTopTracks = this.getTopTracks.bind(this);
     this.getTopArtists = this.getTopArtists.bind(this);
+    this.pausePlayer = this.pausePlayer.bind(this);
+    this.playPlayer = this.playPlayer.bind(this);
     this.tick = this.tick.bind(this);
     
     this.handleClick1 = this.handleClick1.bind(this);
     this.handleClick2 = this.handleClick2.bind(this);
     this.handleClick3 = this.handleClick3.bind(this);
+    this.handlePause = this.handlePause.bind(this);
+    this.handlePlay = this.handlePlay.bind(this);
 
     this.setSage = this.setSage.bind(this);
     this.setRetro = this.setRetro.bind(this);
     this.setBubblegum = this.setBubblegum.bind(this);
     // this.brown = this.brown.bind(this);
+
+    
   }
 
   handleClick1() {
@@ -98,6 +106,20 @@ class App extends Component {
     this.getTopArtists(this.state.token, long_uri);
     this.setState({
       time_range: long_uri
+    });
+  }
+
+  handlePause() {
+    this.pausePlayer(this.state.token);
+    this.setState({
+      is_playing: 'paused',
+    });
+  }
+
+  handlePlay() {
+    this.playPlayer(this.state.token);
+    this.setState({
+      is_playing: 'playing',
     });
   }
 
@@ -142,7 +164,7 @@ class App extends Component {
     }
 
     // set interval for polling every 2 seconds
-    this.interval = setInterval(() => this.tick(), 500);
+    this.interval = setInterval(() => this.tick(), 2000);
   }
 
   componentWillUnmount() {
@@ -217,12 +239,66 @@ class App extends Component {
     }
   };
 
+  pausePlayer(token) {
+    // make a call using the token
+    $.ajax({
+      url: "https://api.spotify.com/v1/me/player/devices",
+      type: "GET",
+      beforeSend: xhr => {
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+      },
+      success: data => {
+        this.setState({
+          device_info: data
+        })
+      }
+    });
+
+    // function getDeviceID() {
+    //   for (let i = 0; i < this.state.device_info.length; i++) {
+    //     if (this.state.device_info[i]["is_active"] == true) {
+    //       return this.state.device_info[i]["id"];
+    //     }
+    //   }
+    // }
+
+    // const device_id = getDeviceID();
+
+    $.ajax({
+      url: pause_uri + "b0be3c62624f61009a1f3b4ca4b447dd3a036b9d",
+      type: "PUT",
+      beforeSend: xhr => {
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+      },
+      success: data => {
+        this.setState({
+          is_playing: 'paused',
+        })
+      }
+    });
+  }
+
+  playPlayer(token) {
+    $.ajax({
+      url: play_uri + "b0be3c62624f61009a1f3b4ca4b447dd3a036b9d",
+      data: '{"uri":"}',
+      type: "PUT",
+      beforeSend: xhr => {
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+      },
+      
+      success: data => {
+        this.setState({
+          is_playing: 'playing',
+        })
+      }
+    });
+  }
+
   render() {
     return (
 
       <div className="App" style={{backgroundColor: this.state.current_color[1]}}>
-        
-        
 
         <header className="App-header">
         <div className="title">
@@ -264,11 +340,11 @@ class App extends Component {
                           is_playing={this.state.is_playing}
                           progress_ms={this.state.progress_ms}
                           current_color={this.state.current_color}
+                          handlePause={this.handlePause}
                         />
                     </div>
                 </div>
               </div>
-
 
           )}
           {this.state.no_data && (
