@@ -19,12 +19,13 @@
 
 .artists-box {
     display: flex;
-    padding: 25px;
+    padding: 16px;
     background: #A3B899;
-    border: 2px solid #6B6666;
-    border-radius:20px;
     float: right;
-    width: 45%;
+    width: 400px;
+    height: 675px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
   }
 
 
@@ -36,9 +37,12 @@
 }
 
 .top-artists-list {
-    list-style-position:inside;
-    font-size:0.8em;
-    line-height:25px;
+    font-size:0.5em;
+    line-height:15px;
+    grid-auto-columns: 26%;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 15px;
 }
 
 .top-tracks-header {
@@ -55,6 +59,9 @@
 .top-artist-img img {
     /* width: 80%; */
     /* float: none; */
+    margin-top: 118px;
     padding-bottom: 15px;
+    width: 366px;
+
 }
 
