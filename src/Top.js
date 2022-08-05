@@ -61,12 +61,11 @@ const Top = props => {
                 />
                 <div>{props.top_artist_items[2].name}</div>
               </div>
-
-
-
             </div>
           </div>
         </div>
+
+
       </div>
       </div>
         

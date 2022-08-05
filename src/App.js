@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as $ from "jquery";
+
 import { authEndpoint, clientId, redirectUri, scopes } from "./const";
 import { track_uri, artist_uri, short_uri, medium_uri, long_uri } from "./const"
 import { pause_uri, play_uri } from "./const";
@@ -33,9 +34,9 @@ class App extends Component {
       progress_ms: 0,
       no_data: false,
 
-      // top tracks
+      // short 
 
-      top_track_items: [{
+      top_track_items_short_term: [{
         item: {
           album: {
             images: [{ url: "" }]
@@ -44,19 +45,52 @@ class App extends Component {
           artists: [{ name: "" }],
         }
       }],
+
       retrieved_tracks: false,
       
-      // top artists
-      
-      top_artist_items: [{
+      top_artist_items_short_term: [{
         genres: [],
         images: [{ url: "" }],
         name: ""
       }],
+      
       retrieved_artists: false,
 
-      // other
+      // medium
+      
+      top_track_items_medium_term: [{
+        item: {
+          album: {
+            images: [{ url: "" }]
+          },
+          name: "",
+          artists: [{ name: "" }],
+        }
+      }],
+      top_artist_items_medium_term: [{
+        genres: [],
+        images: [{ url: "" }],
+        name: ""
+      }],
+      
+      // medium
 
+      top_track_items_long_term: [{
+        item: {
+          album: {
+            images: [{ url: "" }]
+          },
+          name: "",
+          artists: [{ name: "" }],
+        }
+      }],
+      top_artist_items_long_term: [{
+        genres: [],
+        images: [{ url: "" }],
+        name: ""
+      }],
+
+      // other
       time_range: short_uri,
 
       current_color: sage,
@@ -81,29 +115,21 @@ class App extends Component {
     this.setRetro = this.setRetro.bind(this);
     this.setBubblegum = this.setBubblegum.bind(this);
     // this.brown = this.brown.bind(this);
-
-    
   }
 
   handleClick1() {
-    this.getTopTracks(this.state.token, short_uri);
-    this.getTopArtists(this.state.token, short_uri);
     this.setState({
       time_range: short_uri
     });
   }
 
   handleClick2() {
-    this.getTopTracks(this.state.token, medium_uri);
-    this.getTopArtists(this.state.token, medium_uri);
     this.setState({
       time_range: medium_uri
     });
   }
 
   handleClick3() {
-    this.getTopTracks(this.state.token, long_uri);
-    this.getTopArtists(this.state.token, long_uri);
     this.setState({
       time_range: long_uri
     });
@@ -151,6 +177,7 @@ class App extends Component {
   componentDidMount() {
     // Set token
     let _token = hash.access_token;
+    var uris = [short_uri, medium_uri, long_uri]
 
     if (_token) {
       // Set token
@@ -159,8 +186,10 @@ class App extends Component {
       });
 
       this.getCurrentlyPlaying(_token);
-      this.getTopTracks(_token, short_uri);
-      this.getTopArtists(_token, short_uri);
+      for (var i = 0; i < uris.length; i++) {
+        this.getTopTracks(_token, uris[i])
+        this.getTopArtists(_token, uris[i])
+      }
     }
 
     // set interval for polling every 2 seconds
@@ -207,6 +236,7 @@ class App extends Component {
 
   getTopTracks(token, length) {
     // make a call using the token
+    var item_name = `top_track_items_${length}`;
     $.ajax({
       url: track_uri + length,
       type: "GET",
@@ -216,13 +246,14 @@ class App extends Component {
       success: data => {
         this.setState({
           retrieved_tracks: true,
-          top_track_items: data.items,
+          [item_name]: data.items,
         })
       }
     });
   }
 
   getTopArtists = async(token, length) => {
+    var item_name = `top_artist_items_${length}`;
     try{
       const response = await axios.get(artist_uri + length, {
         headers: {
@@ -232,7 +263,7 @@ class App extends Component {
 
       this.setState({
         retrieved_artists: true,
-        top_artist_items: response.data.items,
+        [item_name]: response.data.items,
       })
     } catch(error){
       console.log(error);
@@ -253,6 +284,7 @@ class App extends Component {
         })
       }
     });
+
 
     // function getDeviceID() {
     //   for (let i = 0; i < this.state.device_info.length; i++) {
@@ -295,7 +327,11 @@ class App extends Component {
     });
   }
 
+
+
   render() {
+    var top_track_items = `top_track_items_${this.state.time_range}`;
+    var top_artist_items = `top_artist_items_${this.state.time_range}`;
     return (
 
       <div className="App" style={{backgroundColor: this.state.current_color[1]}}>
@@ -364,21 +400,24 @@ class App extends Component {
             />
           )}
 
-          {/* stats */}
+          {/* testing!! */}
 
           {this.state.token && this.state.retrieved_tracks && this.state.retrieved_artists &&(  
             <Top
-              top_track_items={this.state.top_track_items}
-              top_artist_items={this.state.top_artist_items}
+              top_track_items={this.state[top_track_items]}
+              top_artist_items={this.state[top_artist_items]}
               current_color={this.state.current_color}
             />
           )}
+
+
+
 
           {/* genres */}
 
           {this.state.token &&this.state.retrieved_artists &&(
             <Genres
-              top_artist_items={this.state.top_artist_items}
+              top_artist_items={this.state[top_artist_items]}
               current_color={this.state.current_color}
             />
           )}
