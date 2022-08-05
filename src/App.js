@@ -286,15 +286,15 @@ class App extends Component {
     });
 
 
-    // function getDeviceID() {
-    //   for (let i = 0; i < this.state.device_info.length; i++) {
-    //     if (this.state.device_info[i]["is_active"] == true) {
-    //       return this.state.device_info[i]["id"];
-    //     }
-    //   }
-    // }
+    function getDeviceID() {
+      for (let i = 0; i < this.state.device_info.length; i++) {
+        if (this.state.device_info[i]["is_active"] == true) {
+          return this.state.device_info[i]["id"];
+        }
+      }
+    }
 
-    // const device_id = getDeviceID();
+    const device_id = getDeviceID();
 
     $.ajax({
       url: pause_uri + "b0be3c62624f61009a1f3b4ca4b447dd3a036b9d",
