@@ -35,8 +35,7 @@ class App extends Component {
       progress_ms: 0,
       no_data: false,
 
-      // short 
-
+      // short
       top_track_items_short_term: [{
         item: {
           album: {
@@ -58,7 +57,6 @@ class App extends Component {
       retrieved_artists: false,
 
       // medium
-      
       top_track_items_medium_term: [{
         item: {
           album: {
