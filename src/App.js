@@ -3,7 +3,7 @@ import * as $ from "jquery";
 
 import { authEndpoint, clientId, redirectUri, scopes } from "./const";
 import { track_uri, artist_uri, short_uri, medium_uri, long_uri } from "./const"
-import { pause_uri, play_uri } from "./const";
+import { pause_uri, play_uri, next_uri, prev_uri } from "./const";
 import { sage, retro, bubblegum } from "./colors"
 import hash from "./hash";
 import Player from "./Player";
@@ -15,6 +15,7 @@ import Button from 'react-bootstrap/Button';
 import radio from './images/Radio.png';
 import "./App.css";
 import axios from 'axios';
+
 
 class App extends Component {
   constructor() {
@@ -28,9 +29,9 @@ class App extends Component {
         },
         name: "",
         artists: [{ name: "" }],
-        duration_ms: 0
+        duration_ms: 0,
       },
-      is_playing: "paused",
+      is_playing: false,
       progress_ms: 0,
       no_data: false,
 
@@ -94,15 +95,19 @@ class App extends Component {
       time_range: short_uri,
 
       current_color: sage,
+      retrieved_device: false,
       device_info: '',
 
     };
 
     this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
+    this.getDeviceInfo = this.getDeviceInfo.bind(this);
     this.getTopTracks = this.getTopTracks.bind(this);
     this.getTopArtists = this.getTopArtists.bind(this);
     this.pausePlayer = this.pausePlayer.bind(this);
     this.playPlayer = this.playPlayer.bind(this);
+    this.nextSong = this.nextSong.bind(this);
+    this.prevSong = this.prevSong.bind(this);
     this.tick = this.tick.bind(this);
     
     this.handleClick1 = this.handleClick1.bind(this);
@@ -110,6 +115,8 @@ class App extends Component {
     this.handleClick3 = this.handleClick3.bind(this);
     this.handlePause = this.handlePause.bind(this);
     this.handlePlay = this.handlePlay.bind(this);
+    this.handleNext = this.handleNext.bind(this);
+    this.handlePrev = this.handlePrev.bind(this);
 
     this.setSage = this.setSage.bind(this);
     this.setRetro = this.setRetro.bind(this);
@@ -137,16 +144,32 @@ class App extends Component {
 
   handlePause() {
     this.pausePlayer(this.state.token);
-    this.setState({
-      is_playing: 'paused',
-    });
+    // this.setState({
+    //   is_playing: false,
+    // });
+    // console.log('handle pause');
   }
 
   handlePlay() {
+    // this.setState({
+    //   is_playing: true,
+    // });
+    // console.log('handle play');
     this.playPlayer(this.state.token);
+  }
+
+  handleNext() {
     this.setState({
-      is_playing: 'playing',
+      is_playing: true,
     });
+    this.nextSong(this.state.token);
+  }
+
+  handlePrev() {
+    this.setState({
+      is_playing: true,
+    });
+    this.prevSong(this.state.token);
   }
 
   setSage() {
@@ -167,12 +190,6 @@ class App extends Component {
     });
   }
 
-  // brown() {
-  //   this.setState({
-  //     color: 'brown'
-  //   });
-  // }
-
   // runs after first render() lifecycle
   componentDidMount() {
     // Set token
@@ -190,10 +207,11 @@ class App extends Component {
         this.getTopTracks(_token, uris[i])
         this.getTopArtists(_token, uris[i])
       }
+      this.getDeviceInfo(_token)
     }
 
     // set interval for polling every 2 seconds
-    this.interval = setInterval(() => this.tick(), 2000);
+    this.interval = setInterval(() => this.tick(), 100);
   }
 
   componentWillUnmount() {
@@ -223,13 +241,14 @@ class App extends Component {
           });
           return;
         }
-
+        
         this.setState({
           item: data.item,
           is_playing: data.is_playing,
           progress_ms: data.progress_ms,
           no_data: false
         });
+        // console.log('currently playing');
       }
     });
   }
@@ -270,7 +289,7 @@ class App extends Component {
     }
   };
 
-  pausePlayer(token) {
+  getDeviceInfo(token) {
     // make a call using the token
     $.ajax({
       url: "https://api.spotify.com/v1/me/player/devices",
@@ -279,59 +298,87 @@ class App extends Component {
         xhr.setRequestHeader("Authorization", "Bearer " + token);
       },
       success: data => {
-        this.setState({
-          device_info: data
-        })
-      }
-    });
-
-
-    function getDeviceID() {
-      for (let i = 0; i < this.state.device_info.length; i++) {
-        if (this.state.device_info[i]["is_active"] == true) {
-          return this.state.device_info[i]["id"];
+        for (var i = 0; i < data.devices.length; i++) {
+          if (data.devices[i]["is_active"] === true) {
+            this.setState({
+              device_info: data.devices[i].id,
+              retrieved_device: true
+            })
+          }
         }
       }
-    }
+    });
+  }
 
-    const device_id = getDeviceID();
-
+  pausePlayer(token) {
     $.ajax({
-      url: pause_uri + "b0be3c62624f61009a1f3b4ca4b447dd3a036b9d",
+      url: pause_uri + this.state.device_info,
       type: "PUT",
       beforeSend: xhr => {
         xhr.setRequestHeader("Authorization", "Bearer " + token);
       },
       success: data => {
         this.setState({
-          is_playing: 'paused',
+          is_playing: false,
         })
+        // console.log('pause')
       }
     });
   }
 
   playPlayer(token) {
     $.ajax({
-      url: play_uri + "b0be3c62624f61009a1f3b4ca4b447dd3a036b9d",
-      data: '{"uri":"}',
-      type: "PUT",
+      url:  'https://api.spotify.com/v1/me/player/play',
+      headers: { 'Authorization': 'Bearer ' + token },
+      method: 'PUT',
+      dataType: 'json',
+      body: {
+          // "context_uri": "spotify:album:5ht7ItJgpBH7W6vJ5BqpPr",
+          "offset": {"position": 5}
+        },
+      success: data => {
+        this.setState({
+          is_playing: true,
+        })
+        // console.log('play')
+      }
+    })
+  }
+
+  nextSong(token) {
+    $.ajax({
+      url: next_uri + this.state.device_info,
+      type: "POST",
       beforeSend: xhr => {
         xhr.setRequestHeader("Authorization", "Bearer " + token);
       },
-      
       success: data => {
         this.setState({
-          is_playing: 'playing',
+          is_playing: true,
         })
       }
     });
   }
 
-
+  prevSong(token) {
+    $.ajax({
+      url: prev_uri + this.state.device_info,
+      type: "POST",
+      beforeSend: xhr => {
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+      },
+      success: data => {
+        this.setState({
+          is_playing: true,
+        })
+      }
+    });
+  }
 
   render() {
     var top_track_items = `top_track_items_${this.state.time_range}`;
     var top_artist_items = `top_artist_items_${this.state.time_range}`;
+    // console.log(this.state.is_playing);
     return (
 
       <div className="App" style={{backgroundColor: this.state.current_color[1]}}>
@@ -377,6 +424,9 @@ class App extends Component {
                           progress_ms={this.state.progress_ms}
                           current_color={this.state.current_color}
                           handlePause={this.handlePause}
+                          handlePlay={this.handlePlay}
+                          handleNext={this.handleNext}
+                          handlePrev={this.handlePrev}
                         />
                     </div>
                 </div>
@@ -409,9 +459,6 @@ class App extends Component {
               current_color={this.state.current_color}
             />
           )}
-
-
-
 
           {/* genres */}
 

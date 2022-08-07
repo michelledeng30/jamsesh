@@ -18,4 +18,6 @@ export const medium_uri = "medium_term";
 export const long_uri = "long_term";
 
 export const pause_uri = "https://api.spotify.com/v1/me/player/pause?device_id=";
-export const play_uri = "https://api.spotify.com/v1/me/player/play?device_id="
+export const play_uri = "https://api.spotify.com/v1/me/player/play?device_id=";
+export const next_uri = "https://api.spotify.com/v1/me/player/next?device_id=";
+export const prev_uri = "https://api.spotify.com/v1/me/player/previous?device_id=";
