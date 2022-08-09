@@ -26,7 +26,7 @@ const Genres = props => {
     }
 
     let freq_hash = getRankings();
-    let rankings = (Object.keys(freq_hash)).slice(0, 10);
+    let rankings = (Object.keys(freq_hash)).slice(0, 15);
     const genres_color = props.current_color[4]
 
     return (
