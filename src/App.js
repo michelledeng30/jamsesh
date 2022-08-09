@@ -6,7 +6,8 @@ import { pause_uri, play_uri } from "./const";
 import { sage, retro, bubblegum } from "./colors"
 import hash from "./hash";
 import Player from "./Player";
-import Top from "./Top";
+import TopArtists from "./TopArtists";
+import TopSongs from "./TopSongs";
 import ToggleButtons from "./Toggle";
 import Genres from "./Genres"
 import Color from "./Color";
@@ -332,7 +333,7 @@ class App extends Component {
           
           {this.state.token && !this.state.no_data && (
               <div className="pb-14 flex flex-col items-center h-full w-full">
-                <div className="h-4/5 w-3/4 container relative">
+                <div className="radioPlayer h-4/5 w-3/4 container relative">
                     <img className="absolute w-auto h-auto" src={radio} alt="radio"></img>
                     <div className="pt-20 object-contain max-w-fit max-h-fit">
                         <Player
@@ -366,13 +367,20 @@ class App extends Component {
 
           {/* stats */}
 
-          {this.state.token && this.state.retrieved_tracks && this.state.retrieved_artists &&(  
-            <Top
-              top_track_items={this.state.top_track_items}
+          {this.state.token && this.state.retrieved_artists &&(  
+            <TopArtists
               top_artist_items={this.state.top_artist_items}
               current_color={this.state.current_color}
             />
           )}
+
+          {this.state.token && this.state.retrieved_tracks &&(  
+            <TopSongs
+              top_track_items={this.state.top_track_items}
+              current_color={this.state.current_color}
+            />
+          )}
+          
 
           {/* genres */}
 
