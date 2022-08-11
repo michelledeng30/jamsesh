@@ -96,7 +96,8 @@ class App extends Component {
       current_color: sage,
       retrieved_device: false,
       device_info: '',
-
+      image_link: '',
+      first_image: false,
     };
 
     this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
@@ -109,13 +110,12 @@ class App extends Component {
     this.prevSong = this.prevSong.bind(this);
     this.tick = this.tick.bind(this);
     
-    this.handleClick1 = this.handleClick1.bind(this);
-    this.handleClick2 = this.handleClick2.bind(this);
-    this.handleClick3 = this.handleClick3.bind(this);
     this.handlePause = this.handlePause.bind(this);
     this.handlePlay = this.handlePlay.bind(this);
     this.handleNext = this.handleNext.bind(this);
     this.handlePrev = this.handlePrev.bind(this);
+    this.handleImageChange = this.handleImageChange.bind(this);
+    this.handleTimeRange = this.handleTimeRange.bind(this);
 
     this.setSage = this.setSage.bind(this);
     this.setRetro = this.setRetro.bind(this);
@@ -123,23 +123,7 @@ class App extends Component {
     // this.brown = this.brown.bind(this);
   }
 
-  handleClick1() {
-    this.setState({
-      time_range: short_uri
-    });
-  }
 
-  handleClick2() {
-    this.setState({
-      time_range: medium_uri
-    });
-  }
-
-  handleClick3() {
-    this.setState({
-      time_range: long_uri
-    });
-  }
 
   handlePause() {
     this.pausePlayer(this.state.token);
@@ -170,6 +154,21 @@ class App extends Component {
     });
     this.prevSong(this.state.token);
   }
+
+  handleImageChange(image_link){
+    this.setState({ 
+      image_link: image_link,
+    });
+    console.log(image_link)
+  }
+
+  handleTimeRange(time_range){
+    this.setState({
+      time_range: time_range,
+    });
+    console.log(time_range)
+  }
+  
 
   setSage() {
     this.setState({
@@ -208,7 +207,7 @@ class App extends Component {
       }
       this.getDeviceInfo(_token)
     }
-
+    
     // set interval for polling every 2 seconds
     this.interval = setInterval(() => this.tick(), 100);
   }
@@ -268,6 +267,7 @@ class App extends Component {
         })
       }
     });
+    
   }
 
   getTopArtists = async(token, length) => {
@@ -377,7 +377,14 @@ class App extends Component {
   render() {
     var top_track_items = `top_track_items_${this.state.time_range}`;
     var top_artist_items = `top_artist_items_${this.state.time_range}`;
-    // console.log(this.state.is_playing);
+
+    if(this.state.retrieved_tracks === true && this.state.first_image === false) {
+      this.setState({
+        image_link: this.state.top_artist_items_short_term[0].images[0].url,
+        first_image: true,
+      })
+    }
+
     return (
 
       <div className="App" style={{backgroundColor: this.state.current_color[1]}}>
@@ -405,7 +412,6 @@ class App extends Component {
               setSage={this.setSage}
               setRetro={this.setRetro}
               setBubblegum={this.setBubblegum}
-              // brown={this.brown}
               current_color={this.state.current_color}
             />
           )}
@@ -443,9 +449,12 @@ class App extends Component {
           {this.state.token && (
             <ToggleButtons 
               time_range={this.state.time_range}
-              handleClick1={this.handleClick1}
-              handleClick2={this.handleClick2}
-              handleClick3={this.handleClick3}
+              image_link={this.state.image_link}
+              handleImageChange={this.handleImageChange}
+              handleTimeRange={this.handleTimeRange}
+              top_artist_items_short_term={this.state.top_artist_items_short_term}
+              top_artist_items_medium_term={this.state.top_artist_items_medium_term}
+              top_artist_items_long_term={this.state.top_artist_items_long_term}
             />
           )}
 
@@ -454,7 +463,8 @@ class App extends Component {
           {this.state.token && this.state.retrieved_artists &&(  
             <TopArtists
               top_artist_items={this.state[top_artist_items]}
-
+              image_link={this.state.image_link}
+              handleImageChange={this.handleImageChange}
             />
           )}
 

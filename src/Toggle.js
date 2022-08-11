@@ -2,12 +2,16 @@ import React, { Component } from "react";
 import "./Toggle.css";
 import { short_uri, medium_uri, long_uri } from "./const";
 
-// import Button from 'react-bootstrap/Button';
-// import ButtonGroup from 'react-bootstrap/Button';
-// import styled from 'styled-components';
 
 
 export class ToggleButtons extends Component {
+    handleImageInput(image_link){
+        this.props.handleImageChange(image_link)
+    }
+
+    handleTimeInput(time_frame){
+        this.props.handleTimeRange(time_frame)
+    }
 
     render() {
         let button1_color = "not-pressed";
@@ -28,13 +32,28 @@ export class ToggleButtons extends Component {
             <div>
                 <div className="toggle-header">
                     <div className="button-group">
-                        <button className={button1_color} onClick={this.props.handleClick1}>
+                        <button className={button1_color} 
+                        onClick={(e) => {
+                            this.handleImageInput(this.props.top_artist_items_short_term[0].images[0].url);
+                            this.handleTimeInput(short_uri);
+                        }}
+                        >
                             last month
                         </button>
-                        <button className={button2_color} onClick={this.props.handleClick2}>
+                        <button className={button2_color} 
+                        onClick={(e) => {
+                            this.handleImageInput(this.props.top_artist_items_medium_term[0].images[0].url);
+                            this.handleTimeInput(medium_uri);
+                        }}
+                        >
                             six months
                             </button>
-                        <button className={button3_color} onClick={this.props.handleClick3}>
+                        <button className={button3_color} 
+                        onClick={(e) => {
+                            this.handleImageInput(this.props.top_artist_items_long_term[0].images[0].url);
+                            this.handleTimeInput(long_uri);
+                        }}
+                        >
                             all-time
                         </button>
                     </div>
