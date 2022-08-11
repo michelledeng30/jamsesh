@@ -453,14 +453,14 @@ class App extends Component {
 
           {this.state.token && this.state.retrieved_artists &&(  
             <TopArtists
-              top_artist_items={this.state.top_artist_items}
+              top_artist_items={this.state[top_artist_items]}
 
             />
           )}
 
           {this.state.token && this.state.retrieved_tracks &&(  
             <TopSongs
-              top_track_items={this.state.top_track_items}
+              top_track_items={this.state[top_track_items]}
               current_color={this.state.current_color}
             />
           )}

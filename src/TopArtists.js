@@ -6,7 +6,6 @@ import artistTab from './images/ArtistTab.png';
 
 
 const TopArtists = props => {
-  const artists_color = props.current_color[3];
   const [selectedImg , setSelectedImg] = useState(props.top_artist_items[0].images[0].url);
   return (
     <div className="App">
