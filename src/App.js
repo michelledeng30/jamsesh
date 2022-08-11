@@ -4,7 +4,7 @@ import * as $ from "jquery";
 import { authEndpoint, clientId, redirectUri, scopes } from "./const";
 import { track_uri, artist_uri, short_uri, medium_uri, long_uri } from "./const"
 import { pause_uri, play_uri, next_uri, prev_uri } from "./const";
-import { sage, retro, bubblegum } from "./colors"
+import { sage } from "./colors"
 import hash from "./hash";
 import Player from "./Player";
 import TopArtists from "./TopArtists";
@@ -97,7 +97,6 @@ class App extends Component {
       retrieved_device: false,
       device_info: '',
       image_link: '',
-      first_image: false,
     };
 
     this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
@@ -116,28 +115,15 @@ class App extends Component {
     this.handlePrev = this.handlePrev.bind(this);
     this.handleImageChange = this.handleImageChange.bind(this);
     this.handleTimeRange = this.handleTimeRange.bind(this);
-
-    this.setSage = this.setSage.bind(this);
-    this.setRetro = this.setRetro.bind(this);
-    this.setBubblegum = this.setBubblegum.bind(this);
-    // this.brown = this.brown.bind(this);
+    this.handleColor = this.handleColor.bind(this);
   }
-
 
 
   handlePause() {
     this.pausePlayer(this.state.token);
-    // this.setState({
-    //   is_playing: false,
-    // });
-    // console.log('handle pause');
   }
 
   handlePlay() {
-    // this.setState({
-    //   is_playing: true,
-    // });
-    // console.log('handle play');
     this.playPlayer(this.state.token);
   }
 
@@ -159,34 +145,20 @@ class App extends Component {
     this.setState({ 
       image_link: image_link,
     });
-    console.log(image_link)
   }
 
   handleTimeRange(time_range){
     this.setState({
       time_range: time_range,
     });
-    console.log(time_range)
   }
   
-
-  setSage() {
+  handleColor(color) {
     this.setState({
-      current_color: sage
-    });
+      current_color: color
+    })
   }
 
-  setRetro() {
-    this.setState({
-      current_color: retro
-    });
-  }
-
-  setBubblegum() {
-    this.setState({
-      current_color: bubblegum
-    });
-  }
 
   // runs after first render() lifecycle
   componentDidMount() {
@@ -201,15 +173,17 @@ class App extends Component {
       });
 
       this.getCurrentlyPlaying(_token);
+
       for (var i = 0; i < uris.length; i++) {
         this.getTopTracks(_token, uris[i])
         this.getTopArtists(_token, uris[i])
       }
+
       this.getDeviceInfo(_token)
     }
-    
+        
     // set interval for polling every 2 seconds
-    this.interval = setInterval(() => this.tick(), 100);
+    this.interval = setInterval(() => this.tick(), 2000);
   }
 
   componentWillUnmount() {
@@ -246,7 +220,6 @@ class App extends Component {
           progress_ms: data.progress_ms,
           no_data: false
         });
-        // console.log('currently playing');
       }
     });
   }
@@ -267,7 +240,6 @@ class App extends Component {
         })
       }
     });
-    
   }
 
   getTopArtists = async(token, length) => {
@@ -282,6 +254,7 @@ class App extends Component {
       this.setState({
         retrieved_artists: true,
         [item_name]: response.data.items,
+        image_link: this.state.top_artist_items_short_term[0].images[0].url,
       })
     } catch(error){
       console.log(error);
@@ -320,14 +293,13 @@ class App extends Component {
         this.setState({
           is_playing: false,
         })
-        // console.log('pause')
       }
     });
   }
 
   playPlayer(token) {
     $.ajax({
-      url:  'https://api.spotify.com/v1/me/player/play',
+      url:  play_uri,
       headers: { 'Authorization': 'Bearer ' + token },
       method: 'PUT',
       dataType: 'json',
@@ -339,7 +311,6 @@ class App extends Component {
         this.setState({
           is_playing: true,
         })
-        // console.log('play')
       }
     })
   }
@@ -378,13 +349,6 @@ class App extends Component {
     var top_track_items = `top_track_items_${this.state.time_range}`;
     var top_artist_items = `top_artist_items_${this.state.time_range}`;
 
-    if(this.state.retrieved_tracks === true && this.state.first_image === false) {
-      this.setState({
-        image_link: this.state.top_artist_items_short_term[0].images[0].url,
-        first_image: true,
-      })
-    }
-
     return (
 
       <div className="App" style={{backgroundColor: this.state.current_color[1]}}>
@@ -408,10 +372,7 @@ class App extends Component {
 
           {this.state.token && (
             <Color
-
-              setSage={this.setSage}
-              setRetro={this.setRetro}
-              setBubblegum={this.setBubblegum}
+              handleColor={this.handleColor}
               current_color={this.state.current_color}
             />
           )}
@@ -475,7 +436,6 @@ class App extends Component {
             />
           )}
           
-
           {/* genres */}
 
           {this.state.token &&this.state.retrieved_artists &&(
