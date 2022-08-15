@@ -16,6 +16,8 @@ import Button from 'react-bootstrap/Button';
 import radio from './images/Radio.png';
 import "./App.css";
 import axios from 'axios';
+import DragBox from "./TopSongDrag";
+
 
 
 class App extends Component {
@@ -98,6 +100,7 @@ class App extends Component {
       device_info: '',
       image_link: '',
       first_image: false,
+      activeDrags: 0,
     };
 
     this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
@@ -123,7 +126,13 @@ class App extends Component {
     // this.brown = this.brown.bind(this);
   }
 
+  onStart = () => {
+    this.setState({activeDrags: ++this.state.activeDrags});
+  };
 
+  onStop = () => {
+    this.setState({activeDrags: --this.state.activeDrags});
+  };
 
   handlePause() {
     this.pausePlayer(this.state.token);
@@ -375,6 +384,7 @@ class App extends Component {
   }
 
   render() {
+    const dragHandlers = {onStart: this.onStart, onStop: this.onStop};
     var top_track_items = `top_track_items_${this.state.time_range}`;
     var top_artist_items = `top_artist_items_${this.state.time_range}`;
 
@@ -472,6 +482,7 @@ class App extends Component {
             <TopSongs
               top_track_items={this.state[top_track_items]}
               current_color={this.state.current_color}
+              dragHandlers={this.dragHandlers}
             />
           )}
           

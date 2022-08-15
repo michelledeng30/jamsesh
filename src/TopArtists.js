@@ -27,7 +27,7 @@ const TopArtists = props => {
                   // onClick = {() => setSelectedImg(props.top_artist_items[0].images[0].url)}
                   onClick = {(e) => handleImageInput(props.top_artist_items[0].images[0].url)}
                 />
-                <div class='orbitron-medium'>{props.top_artist_items[0].name}</div>
+                <div className='orbitron-medium'>{props.top_artist_items[0].name}</div>
               </div>
               <div className = "flex flex-col">
               <img
@@ -37,7 +37,7 @@ const TopArtists = props => {
                   alt= "ArtistTwo"
                   onClick = {(e) => handleImageInput(props.top_artist_items[1].images[0].url)}
                 />
-                <div class="orbitron-medium">{props.top_artist_items[1].name}</div>
+                <div className="orbitron-medium">{props.top_artist_items[1].name}</div>
               </div>
               <div className = "flex flex-col">
               <img
@@ -47,7 +47,7 @@ const TopArtists = props => {
                   alt= "ArtistTwo"
                   onClick = {(e) => handleImageInput(props.top_artist_items[2].images[0].url)}
                 />
-                <div class="orbitron-medium">{props.top_artist_items[2].name}</div>
+                <div className="orbitron-medium">{props.top_artist_items[2].name}</div>
               </div>
               <div className = "flex flex-col">
               <img
@@ -57,7 +57,7 @@ const TopArtists = props => {
                   alt= "ArtistTwo"
                   onClick = {(e) => handleImageInput(props.top_artist_items[3].images[0].url)}
                 />
-                <div class="orbitron-medium">{props.top_artist_items[3].name}</div>
+                <div className="orbitron-medium">{props.top_artist_items[3].name}</div>
               </div>
               <div className = "flex flex-col">
               <img
@@ -67,7 +67,7 @@ const TopArtists = props => {
                   alt= "ArtistTwo"
                   onClick = {(e) => handleImageInput(props.top_artist_items[4].images[0].url)}
                 />
-                <div class="orbitron-medium">{props.top_artist_items[4].name}</div>
+                <div className="orbitron-medium">{props.top_artist_items[4].name}</div>
               </div>
             </div>
           </div>
