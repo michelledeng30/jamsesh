@@ -3,6 +3,9 @@ import "./Color.css";
 import { sage, retro, bubblegum } from "./colors"
 
 export class Color extends Component {
+    handleColorInput(color){
+        this.props.handleColor(color)
+    }
     render() {
         return (
             <div>
@@ -10,19 +13,18 @@ export class Color extends Component {
                     <button 
                         className='sage-button' 
                         style={{backgroundColor: sage[0]}} 
-                        onClick={this.props.setSage}>
+                        onClick={(e) => this.handleColorInput(sage)}>
                     </button>
                     <button 
                         className='retro-button' 
                         style={{backgroundColor: retro[0]}} 
-                        onClick={this.props.setRetro}>
+                        onClick={(e) => this.handleColorInput(retro)}>
                     </button>
                     <button
                         className='bubblegum-button' 
                         style={{backgroundColor: bubblegum[0]}}
-                        onClick={this.props.setBubblegum}>
+                        onClick={(e) => this.handleColorInput(bubblegum)}>
                     </button>
-                    {/* <button className='brown-button' onClick={this.props.brown}></button> */}
                 </div>
             </div>
         )
