@@ -15,8 +15,6 @@ const TopSongDrag = props => {
         setDragDiv(ref.current.getBoundingClientRect());
     }, []);
 
-    console.log(props.tracksDivDimensions.width);
-    console.log(dragDiv.width);
 
 
   return (
