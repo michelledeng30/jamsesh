@@ -299,14 +299,14 @@ class App extends Component {
 
   playPlayer(token) {
     $.ajax({
-      url:  play_uri,
+      url: play_uri + this.state.device_info,
       headers: { 'Authorization': 'Bearer ' + token },
       method: 'PUT',
       dataType: 'json',
       body: {
-          // "context_uri": "spotify:album:5ht7ItJgpBH7W6vJ5BqpPr",
+          "context_uri": "spotify:album:5ht7ItJgpBH7W6vJ5BqpPr",
           "offset": {"position": 5}
-        },
+      },
       success: data => {
         this.setState({
           is_playing: true,
@@ -370,12 +370,12 @@ class App extends Component {
 
           {/* color toggle */}
 
-          {this.state.token && (
+          {/* {this.state.token && (
             <Color
               handleColor={this.handleColor}
               current_color={this.state.current_color}
             />
-          )}
+          )} */}
 
           {/* player */}
           

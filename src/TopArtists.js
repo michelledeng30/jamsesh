@@ -3,8 +3,6 @@ import { useState } from "react";
 import "./Top.css";
 import artistTab from './images/ArtistTab.png';
 
-
-
 const TopArtists = props => {
 
   function handleImageInput(image_link){
@@ -38,7 +36,6 @@ const TopArtists = props => {
               <img className="items-center" src={props.image_link} />
             </div>
 
-     
             <div className="top-artists-list grid grid-flow-col">
               {topTracks}
             </div>
