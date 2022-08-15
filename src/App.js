@@ -99,11 +99,8 @@ class App extends Component {
       retrieved_device: false,
       device_info: '',
       image_link: '',
-<<<<<<< HEAD
-=======
       first_image: false,
       activeDrags: 0,
->>>>>>> drag_feature
     };
 
     this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
@@ -129,13 +126,11 @@ class App extends Component {
     this.setState({activeDrags: ++this.state.activeDrags});
   };
 
-<<<<<<< HEAD
-=======
+
   onStop = () => {
     this.setState({activeDrags: --this.state.activeDrags});
   };
 
->>>>>>> drag_feature
   handlePause() {
     this.pausePlayer(this.state.token);
   }
