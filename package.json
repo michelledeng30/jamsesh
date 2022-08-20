@@ -2,7 +2,7 @@
   "name": "react-spotify-player",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://michelletriestocode.github.io",
+  "homepage": "http://michelletriestocode.github.io",
   "dependencies": {
     "-": "^0.0.1",
     "@tailwindcss/postcss7-compat": "^2.2.17",
