@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b43c7453.css",
+    "main.js": "/static/js/main.6f5ebfbb.js",
+    "static/js/787.daee0d7d.chunk.js": "/static/js/787.daee0d7d.chunk.js",
+    "static/media/ArtistTab.png": "/static/media/ArtistTab.6a018e41e22e7371bc58.png",
+    "static/media/SongsTab.png": "/static/media/SongsTab.3484b026b8eecbc0c19f.png",
+    "static/media/Radio.png": "/static/media/Radio.945b73f64d579a7abcad.png",
+    "static/media/PrevButton.png": "/static/media/PrevButton.4cbdaf022c48ba7d11c5.png",
+    "static/media/PlayButton.png": "/static/media/PlayButton.90a210c32cf48a0e06e8.png",
+    "static/media/PauseButton.png": "/static/media/PauseButton.ac1231544fc3474eee44.png",
+    "static/media/SkipButton.jpg": "/static/media/SkipButton.d28a1d081eb1041623f8.jpg",
+    "index.html": "/index.html",
+    "main.b43c7453.css.map": "/static/css/main.b43c7453.css.map",
+    "main.6f5ebfbb.js.map": "/static/js/main.6f5ebfbb.js.map",
+    "787.daee0d7d.chunk.js.map": "/static/js/787.daee0d7d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b43c7453.css",
+    "static/js/main.6f5ebfbb.js"
+  ]
+}
